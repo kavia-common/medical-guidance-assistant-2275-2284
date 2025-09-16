@@ -1,6 +1,6 @@
 # Disease Medicine Backend (FastAPI)
 
-A minimal Python FastAPI backend exposing mocked endpoints required by the Disease Medicine Assistant frontend.
+A minimal Python FastAPI backend exposing endpoints required by the Disease Medicine Assistant frontend.
 
 ## Endpoints
 
@@ -27,6 +27,7 @@ A minimal Python FastAPI backend exposing mocked endpoints required by the Disea
     ```
 
 - POST `/api/explain`
+  - Calls OpenAI's Chat Completions API to generate an explanation.
   - Request:
     ```json
     {
@@ -42,8 +43,23 @@ A minimal Python FastAPI backend exposing mocked endpoints required by the Disea
     ```json
     { "answer": "Because ...", "disease_id": "flu" }
     ```
-  - Note: This endpoint is stubbed and returns a mocked explanation.
-    TODO: Integrate OpenAI via LangChain (use environment variables for API key).
+  - Errors:
+    - `500` if `OPENAI_API_KEY` is missing or the OpenAI call fails.
+
+## OpenAI configuration
+
+This backend uses the official `openai` Python package.
+
+Environment variables:
+- `OPENAI_API_KEY` (required): Your OpenAI API key.
+- `OPENAI_MODEL_ID` (optional): Defaults to `gpt-4o-mini`. You can set another supported chat model id.
+
+Create a `.env` for your process manager or export the variables in your shell before running:
+
+```bash
+export OPENAI_API_KEY="sk-..."         # do NOT commit this value
+export OPENAI_MODEL_ID="gpt-4o-mini"   # optional
+```
 
 ## CORS
 
@@ -65,13 +81,21 @@ CORS is enabled permissively for local development so that the React frontend ca
    pip install -r requirements.txt
    ```
 
-3. Start the server (default port 8000):
+3. Set environment variables (at minimum the API key):
+
+   ```bash
+   export OPENAI_API_KEY="your-api-key"
+   # optionally:
+   # export OPENAI_MODEL_ID="gpt-4o-mini"
+   ```
+
+4. Start the server (default port 8000):
 
    ```bash
    uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
    ```
 
-4. Open the docs:
+5. Open the docs:
    - Swagger UI: http://localhost:8000/docs
    - ReDoc: http://localhost:8000/redoc
 
@@ -97,7 +121,7 @@ disease_medicine_backend/
 
 ## Notes
 
-- Data is hardcoded/mocked.
+- Data is hardcoded/mocked for diseases and medicines.
 - No database is used.
-- No API keys required for the mocked implementation.
-- Future work: Implement OpenAI integration in `/api/explain`.
+- API key must be provided via environment variable and must not be hardcoded.
+- The `/api/explain` endpoint now uses OpenAI to produce explanations.
