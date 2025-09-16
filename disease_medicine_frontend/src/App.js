@@ -23,6 +23,8 @@ export function getApiBaseUrl() {
     // Match patterns: /proxy/<digits>/ or /proxy/<digits>
     const proxyMatch = path.match(/^\/proxy\/\d+(?=\/|$)/);
     if (proxyMatch && proxyMatch[0]) {
+      // eslint-disable-next-line no-console
+      console.debug('[getApiBaseUrl] proxy base detected:', proxyMatch[0]);
       return proxyMatch[0]; // e.g., "/proxy/3001"
     }
   } catch (_) {
@@ -70,6 +72,10 @@ function App() {
    */
 
   const apiBase = useMemo(() => getApiBaseUrl(), []);
+  useEffect(() => {
+    // eslint-disable-next-line no-console
+    console.debug('[App] Using apiBase:', apiBase);
+  }, [apiBase]);
   const [theme, setTheme] = useState('light');
 
   const [diseases, setDiseases] = useState(/** @type Disease[] */([]));
@@ -226,6 +232,28 @@ function App() {
 
   return (
     <div className="App">
+      {/* Health check banner to confirm React mounted and base path detection */}
+      <div
+        style={{
+          width: '100%',
+          boxSizing: 'border-box',
+          padding: '8px 12px',
+          background: '#e6ffed',
+          color: '#0b4120',
+          borderBottom: '1px solid #b7eb8f',
+          fontSize: 12,
+          display: 'flex',
+          gap: 12,
+          flexWrap: 'wrap'
+        }}
+        role="status"
+        aria-live="polite"
+      >
+        <strong>Frontend OK</strong>
+        <span>path: {typeof window !== 'undefined' ? window.location.pathname : '(no window)'}</span>
+        <span>apiBase: {apiBase || '(same origin)'}</span>
+      </div>
+
       <header className="App-header" style={{ minHeight: 'auto', padding: '24px', width: '100%', boxSizing: 'border-box' }}>
         <button
           className="theme-toggle"
