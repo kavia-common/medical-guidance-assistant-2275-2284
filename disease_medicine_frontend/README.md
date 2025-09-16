@@ -42,13 +42,34 @@ To stop a process on port 3000 (examples):
   taskkill /PID <PID> /F
   ```
 
+## Connect to the Backend API (Local Dev)
+
+The FastAPI backend for this project is intended to run on port 3001.
+
+1) Create a `.env` in this folder (disease_medicine_frontend):
+```
+REACT_APP_API_BASE_URL=http://localhost:3001
+```
+
+2) Restart the dev server if it was already running:
+```
+npm start
+```
+
+- With the variable set, the app will call:
+  - GET http://localhost:3001/api/diseases
+  - GET http://localhost:3001/api/medicines?disease_id=<id>
+  - POST http://localhost:3001/api/explain
+
+- Without the variable set, the app falls back to same-origin requests and will also automatically preserve a proxy base path like `/proxy/3001` when present (useful under certain dev proxy environments).
+
 ## Environment Variables
-Create a `.env` file at the project root if you are not using same-origin:
-```
-REACT_APP_API_BASE_URL=http://localhost:8000
-```
-If omitted, the frontend will call the same origin (e.g., when served by the backend).
-When the app is hosted under a proxy subpath like `/proxy/3001/`, the app will automatically preserve that base path for same-origin calls (so API requests default to `/proxy/3001/api/...`). If your backend is at a different origin, set `REACT_APP_API_BASE_URL` accordingly.
+- Preferred (when backend is on a different origin/port):
+  ```
+  REACT_APP_API_BASE_URL=http://localhost:3001
+  ```
+- If omitted, the frontend will call the same origin (e.g., when the site is hosted by the backend or behind a proxy).
+- When hosted under a proxy subpath like `/proxy/3001/`, the app preserves that base path for same-origin calls (so API requests default to `/proxy/3001/api/...`).
 
 ## Troubleshooting a blank page
 - If the page is blank, open the browser console. The app includes an ErrorBoundary which will render a visible error if a render-time exception occurs.
