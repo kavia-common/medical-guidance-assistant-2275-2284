@@ -50,6 +50,12 @@ REACT_APP_API_BASE_URL=http://localhost:8000
 If omitted, the frontend will call the same origin (e.g., when served by the backend).
 When the app is hosted under a proxy subpath like `/proxy/3001/`, the app will automatically preserve that base path for same-origin calls (so API requests default to `/proxy/3001/api/...`). If your backend is at a different origin, set `REACT_APP_API_BASE_URL` accordingly.
 
+## Troubleshooting a blank page
+- If the page is blank, open the browser console. The app includes an ErrorBoundary which will render a visible error if a render-time exception occurs.
+- If you see “Root element with id='root' not found”, ensure your `public/index.html` contains `<div id="root"></div>`. The app now also shows this message inline to avoid a blank page.
+- If API requests fail, the UI should still render and show a banner “Frontend OK” at the top. Configure `REACT_APP_API_BASE_URL` when calling a backend on another origin.
+- Verify Node 16+ and npm 8+ for react-scripts 5 compatibility.
+
 ## Deployment under a subpath or proxy
 - This app sets `"homepage": "."` in `package.json` so that assets are referenced using relative paths during build and dev, which is necessary when the site is served at a subpath (e.g., `/proxy/3001/`).
 - No Router basename is required because this app does not use a router.
