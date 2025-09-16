@@ -91,6 +91,8 @@ function App() {
           setSelectedDiseaseId(list[0].id);
         }
       } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error('Error fetching diseases', err);
         setDiseaseError(err?.message || 'Error loading diseases');
       } finally {
         setLoadingDiseases(false);
@@ -118,6 +120,8 @@ function App() {
         const meds = Array.isArray(data?.medicines) ? data.medicines : [];
         setMedicines(meds);
       } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error('Error fetching medicines', err);
         setMedError(err?.message || 'Error loading medicines');
       } finally {
         setLoadingMedicines(false);
@@ -185,6 +189,8 @@ function App() {
       const assistantMsg = { role: 'assistant', content: answer, diseaseId: selectedDiseaseId };
       setMessages(prev => [...prev, assistantMsg]);
     } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('Error requesting explanation', err);
       setChatError(err?.message || 'Error requesting explanation.');
     } finally {
       setSending(false);
