@@ -1,0 +1,4 @@
+{
+    "command": "npm run test",
+    "working_directory": "/home/kavia/workspace/code-generation/medical-guidance-assistant-2275-2284/disease_medicine_frontend"
+}
