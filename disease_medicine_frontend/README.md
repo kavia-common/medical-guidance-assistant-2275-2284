@@ -19,6 +19,10 @@ npm start
 
 Open http://localhost:3000 in your browser.
 
+If you want to run on an alternate port (e.g., 3002), use:
+- PORT=3002 npm run start:port
+Then open http://localhost:3002
+
 If you see a message like “Something is already running on port 3000…”, it means another process is using that port. You can either stop the existing process, or run this app on an alternate port:
 
 - To run on a specific port without interactive prompts:

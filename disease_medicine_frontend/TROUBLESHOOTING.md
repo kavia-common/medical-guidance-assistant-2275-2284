@@ -43,6 +43,7 @@ If you visit a backend port (e.g., 3001) expecting to see the React app, you may
 - The app includes an ErrorBoundary and a visible “Frontend OK” banner to avoid a blank page.
 - If you still see a blank page:
   - Ensure you are opening the frontend dev server URL (port 3000 or the port where CRA runs).
+  - Check that public/index.html exists and contains `<div id="root"></div>` (missing file will prevent React from mounting).
   - Check browser console for errors.
   - Verify Node 16+ and npm 8+ for CRA 5 compatibility.
 
