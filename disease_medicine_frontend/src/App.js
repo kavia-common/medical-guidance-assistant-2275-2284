@@ -113,10 +113,9 @@ function App() {
         const data = await res.json();
         const list = Array.isArray(data?.diseases) ? data.diseases : [];
         setDiseases(list);
-        // Preselect first disease if available
-        if (list.length > 0) {
-          setSelectedDiseaseId(list[0].id);
-        }
+        // Do not auto-select; let the user choose to avoid value mismatches in the controlled select.
+        // If you want to auto-select when only one disease is returned, uncomment below:
+        // if (list.length === 1) setSelectedDiseaseId(list[0].id);
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error('Error fetching diseases', err);
@@ -283,7 +282,11 @@ function App() {
               <select
                 id="disease-select"
                 value={selectedDiseaseId}
-                onChange={(e) => setSelectedDiseaseId(e.target.value)}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setSelectedDiseaseId(val);
+                }}
+                disabled={loadingDiseases || diseases.length === 0}
                 style={{
                   flex: 1,
                   padding: '10px 12px',
@@ -294,7 +297,10 @@ function App() {
                 }}
                 aria-label="Select disease"
               >
-                {diseases.length === 0 && <option value="">No diseases</option>}
+                {/* Placeholder to match initial '' value so user can make a valid selection */}
+                <option value="" disabled>
+                  {diseases.length === 0 ? 'No diseases available' : 'Select a disease…'}
+                </option>
                 {diseases.map(d => (
                   <option value={d.id} key={d.id}>{d.name}</option>
                 ))}
@@ -338,7 +344,7 @@ function App() {
         <section style={{ background: 'var(--bg-secondary)', padding: 16, borderRadius: 12, border: '1px solid var(--border-color)' }}>
           <h2 style={{ marginTop: 0, marginBottom: 12 }}>3) Ask for Explanation</h2>
           <p style={{ marginTop: 0, marginBottom: 12, opacity: 0.8 }}>
-            Disease: <strong>{currentDiseaseName || 'Not selected'}</strong>
+            Disease: <strong>{currentDiseaseName || 'Not selected — please choose above'}</strong>
           </p>
 
           <div
