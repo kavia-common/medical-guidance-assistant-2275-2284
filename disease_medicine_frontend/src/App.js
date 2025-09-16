@@ -3,12 +3,33 @@ import './App.css';
 
 // Helper: read API base URL from env (CRA requires REACT_APP_ prefix)
 // Fallback to same-origin root if not provided.
+/**
+ * Derive a sensible default API base when running behind a reverse proxy path like /proxy/3001/.
+ * - If REACT_APP_API_BASE_URL is set, use it as-is (without trailing slash).
+ * - Else, if window.location.pathname starts with "/proxy/<port>/", use that base path to keep same-origin calls under the proxy segment.
+ * - Else, fallback to empty string for same-origin root.
+ */
 // PUBLIC_INTERFACE
 export function getApiBaseUrl() {
-  /** Returns the API base URL from environment or defaults to empty string for same-origin. */
-  const base = process.env.REACT_APP_API_BASE_URL || '';
-  // Remove trailing slash for consistency
-  return base.endsWith('/') ? base.slice(0, -1) : base;
+  /** Returns the API base URL from environment or defaults to same-origin, preserving proxy base path when present. */
+  const fromEnv = process.env.REACT_APP_API_BASE_URL || '';
+  const normalizedEnv = fromEnv.endsWith('/') ? fromEnv.slice(0, -1) : fromEnv;
+  if (normalizedEnv) return normalizedEnv;
+
+  // Try to detect proxy base path like /proxy/3001/...
+  try {
+    const loc = window.location;
+    const path = loc?.pathname || '';
+    // Match patterns: /proxy/<digits>/ or /proxy/<digits>
+    const proxyMatch = path.match(/^\/proxy\/\d+(?=\/|$)/);
+    if (proxyMatch && proxyMatch[0]) {
+      return proxyMatch[0]; // e.g., "/proxy/3001"
+    }
+  } catch (_) {
+    // ignore if window is not accessible
+  }
+  // Default same-origin root
+  return '';
 }
 
 // Types (JSDoc for clarity)
