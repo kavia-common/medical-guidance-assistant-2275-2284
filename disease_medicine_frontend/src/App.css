@@ -102,3 +102,12 @@
     font-size: 12px;
   }
 }
+
+/* Utility tweaks for prototype layout */
+h1, h2, h3, p {
+  margin: 0;
+}
+
+section + section {
+  margin-top: 12px;
+}
