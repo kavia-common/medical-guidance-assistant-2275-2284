@@ -19,6 +19,29 @@ npm start
 
 Open http://localhost:3000 in your browser.
 
+If you see a message like “Something is already running on port 3000…”, it means another process is using that port. You can either stop the existing process, or run this app on an alternate port:
+
+- To run on a specific port without interactive prompts:
+  ```bash
+  npm run start:3001   # serves at http://localhost:3001
+  ```
+  or set PORT yourself:
+  ```bash
+  PORT=3002 npm run start:port
+  ```
+
+To stop a process on port 3000 (examples):
+- macOS/Linux:
+  ```bash
+  lsof -i :3000
+  kill -9 <PID>
+  ```
+- Windows (PowerShell):
+  ```powershell
+  netstat -ano | findstr :3000
+  taskkill /PID <PID> /F
+  ```
+
 ## Environment Variables
 Create a `.env` file at the project root if you are not using same-origin:
 ```
@@ -59,6 +82,8 @@ The frontend expects these endpoints:
 - The UI is intentionally minimal for rapid prototyping.
 
 ## Scripts
-- `npm start` - start dev server
+- `npm start` - start dev server (defaults to port 3000; will prompt if occupied)
+- `npm run start:3001` - start dev server on port 3001 (no prompt)
+- `PORT=3002 npm run start:port` - start dev server on any port (no prompt)
 - `npm run build` - production build
 - `npm test` - tests

@@ -9,6 +9,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start:port": "cross-env PORT=${PORT:-3000} react-scripts start",
+    "start:3001": "cross-env PORT=3001 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
